@@ -1,6 +1,7 @@
 import pygame
-import math
 from queue import PriorityQueue
+from tkinter import *
+from tkinter import messagebox
 
 # Window set up
 WIDTH = 800
@@ -35,20 +36,8 @@ class Cube:
     def getpos(self):
         return self.row, self.col
 
-    def scanned(self):
-        return self.color == RED
-
-    def not_scanned(self):
-        return self.color == ORANGE
-
     def blocked(self):
         return self.color == BLACK
-
-    def start_point(self):
-        return self.color == GREEN
-
-    def end_point(self):
-        return self.color == PURPLE
 
     def reset(self):
         self.color = WHITE
@@ -241,6 +230,14 @@ def main(win, width):
     end = None
 
     run = True
+
+    Tk().wm_withdraw()
+    messagebox.showinfo("Instructions", "1. Simply pick two points for your start (Green) and end (Purple).\n"
+                                        "\n2. Then draw your barriers or obstacles (Black).\n"
+                                        "\n3. Then on your keyboard, press one for A*Algorithm or two for Dijkstras "
+                                        "Algorithm.\n"
+                                        "\n4. To clear the grid press r.")
+
     # Loop to keep the pygame window running until exit
     while run:
         draw(win, grid, ROWS, width)
@@ -284,6 +281,11 @@ def main(win, width):
                             cube.update_neighbors(grid)
 
                     dijkstra(lambda: draw(win, grid, ROWS, width), grid, start, end)
+
+                if event.key == pygame.K_r:
+                    start = None
+                    end = None
+                    grid = set_grid(ROWS, width)
 
     pygame.quit()
 
